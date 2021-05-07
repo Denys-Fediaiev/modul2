@@ -1,21 +1,19 @@
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         String directoryToSearch = "";
-        String fileToSearch = "test.txt";
-        long minSize = 5;
-        long maxSize = 10;
+        String searchFile = "test.txt";
+        long minSize = 11;
+        long maxSize = 99;
         String regEx = "t.*";
-        System.out.println(findFile(directoryToSearch, fileToSearch, minSize, maxSize, regEx));
+        System.out.println(findFile(directoryToSearch, searchFile, minSize, maxSize, regEx));
     }
 
     public static List<Path> findFile(String directory, String name, long minSize, long maxSize, String regEx) throws IOException {
