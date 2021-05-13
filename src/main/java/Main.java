@@ -21,7 +21,7 @@ public class Main {
     public static List<Path> findFile(String directory, String name, long minSize, long maxSize, String regEx,String keyLine) throws IOException {
         try (Stream<Path> files = Files.walk(Paths.get(directory))) {
             return files
-                    .filter(p -> p.getFileName().toString().equals(name) || p.toFile().getName().matches(regEx) || p.equals(keyLine))
+                    .filter(p -> p.getFileName().toString().equals(name) || p.toFile().getName().matches(regEx) || p.toFile().toString().equals(keyLine))
                     .filter(p -> {
                         try {
                             return Files.size(p) < maxSize && Files.size(p) > minSize;
