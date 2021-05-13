@@ -13,13 +13,15 @@ public class Main {
         long minSize = 11;
         long maxSize = 99;
         String regEx = "t.*";
-        System.out.println(findFile(directoryToSearch, searchFile, minSize, maxSize, regEx));
+        String keyLine = "Our World is so big!";
+        System.out.println(findFile(directoryToSearch, searchFile, minSize, maxSize, regEx,keyLine));
+
     }
 
-    public static List<Path> findFile(String directory, String name, long minSize, long maxSize, String regEx) throws IOException {
+    public static List<Path> findFile(String directory, String name, long minSize, long maxSize, String regEx,String keyLine) throws IOException {
         try (Stream<Path> files = Files.walk(Paths.get(directory))) {
             return files
-                    .filter(p -> p.getFileName().toString().equals(name))
+                    .filter(p -> p.getFileName().toString().equals(name) || p.toFile().getName().matches(regEx) || p.equals(keyLine))
                     .filter(p -> {
                         try {
                             return Files.size(p) < maxSize && Files.size(p) > minSize;
@@ -28,36 +30,33 @@ public class Main {
                         }
                         return false;
                     })
-                    .filter(p -> p.toFile().getName().matches(regEx))
                     .map(Path::toAbsolutePath)
                     .collect(Collectors.toList());
         }
     }
-    public class ReadFileLineByLine {
-        String keyLine = "Our World is so big!";
-        public void main(String[] args) {
-            try {
-                File file = new File("/Users/raydavis/Desktop/developmentJAVA/Modul2/freedom.txt");
-                FileReader fr = new FileReader(file);
-                BufferedReader reader = new BufferedReader(fr);
-                // считаем сначала первую строку
-                String line = reader.readLine();
-                while (line != null) {
-                    System.out.println(line);
-                    // считываем остальные строки в цикле
-                    line = reader.readLine();
-                    if (line == keyLine){
-                        System.out.println("here it is" + line);
-                    }
-                    else System.out.println("nothing here");;
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+
+    public static void findByKeyLine(String keyLine) {
+        try {
+            File file = new File("/Users/raydavis/Desktop/developmentJAVA/Modul2/freedom.txt");
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
+            // считаем сначала первую строку
+            String line = reader.readLine();
+            while (line != null) {
+                System.out.println(line);
+                // считываем остальные строки в цикле
+                line = reader.readLine();
+                if (line == keyLine) {
+                    System.out.println("here it is");
+                } else System.out.println("nothing here");
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 
+        return ;
     }
-}
+    }
