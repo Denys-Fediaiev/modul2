@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,5 +32,32 @@ public class Main {
                     .map(Path::toAbsolutePath)
                     .collect(Collectors.toList());
         }
+    }
+    public class ReadFileLineByLine {
+        String keyLine = "Our World is so big!";
+        public void main(String[] args) {
+            try {
+                File file = new File("/Users/raydavis/Desktop/developmentJAVA/Modul2/freedom.txt");
+                FileReader fr = new FileReader(file);
+                BufferedReader reader = new BufferedReader(fr);
+                // считаем сначала первую строку
+                String line = reader.readLine();
+                while (line != null) {
+                    System.out.println(line);
+                    // считываем остальные строки в цикле
+                    line = reader.readLine();
+                    if (line == keyLine){
+                        System.out.println("here it is" + line);
+                    }
+                    else System.out.println("nothing here");;
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 }
