@@ -12,51 +12,46 @@ public class Main {
     public static void main(String[] args) throws IOException {
         String directoryToSearch = "";
         String searchFile = "test.txt";
-        String path = "/Users/raydavis/Desktop/developmentJAVA/Modul2/freedom.txt";
-        long minSize = 11;
-        long maxSize = 99;
-        String regEx = "t.*";
-        String searchString = "World";
-        System.out.println(findFile(directoryToSearch, searchFile, minSize, maxSize, regEx, searchString, path));
+         String path = "/Users/raydavis/Desktop/developmentJAVA/Modul2/freedom.txt";
+         long minSize = 11;
+         long maxSize = 99;
+         String regEx = "t.*";
+         String searchString = "World";
+        findFile(directoryToSearch, searchFile, minSize, maxSize, regEx, searchString);
     }
-    public static List<Path> findFile(String directory, String name, long minSize, long maxSize, String regEx, String searchString, String path) throws IOException {
-        searchFileByKeyWord(searchString,path);
+    public static void findFile(String directory, String name, long minSize, long maxSize, String regEx, String searchString) throws IOException {
+        var searchLines = new ArrayList<String>();
         try (Stream<Path> files = Files.walk(Paths.get(directory))) {
-            return files
+            var filteredFiles  = files
                     .filter(p -> p.getFileName().toString().equals(name) || p.toFile().getName().matches(regEx))
                     .filter(p -> {
                         try {
                             return Files.size(p) < maxSize && Files.size(p) > minSize;
                         } catch (IOException e) {
-                            e.getMessage();
+                            e.printStackTrace();
                         }
                         return false;
                     })
                     .map(Path::toAbsolutePath)
                     .collect(Collectors.toList());
+            for (var filteredFile : filteredFiles) {
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(String.valueOf(filteredFile)));
+                    String line = reader.readLine();
+                    if (line == null) {
+                        reader.close();
+                        continue;
+                    }
+                    if (line.contains(searchString)) {
+                        searchLines.add(line);
+                    }
+                    reader.close();
+                }catch (IOException e) {
+                    e.getMessage();
+                }
+            }
+            System.out.println(filteredFiles);
+            System.out.println(searchLines);
         }
-    }
-    public static boolean searchFileByKeyWord(String searchString, String path) {
-        List<String> linesToPresent = new ArrayList<>();
-        File f = new File(path);
-        FileReader fr;
-        try {
-            fr = new FileReader(f);
-            BufferedReader br = new BufferedReader(fr);
-            String line;
-            do {
-                line = br.readLine();
-                Pattern p = Pattern.compile(searchString);
-                Matcher m = p.matcher("World");
-                if (m.find())
-                    linesToPresent.add(line);
-            } while (line != null);
-            br.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(linesToPresent);
-        return true;
     }
 }
