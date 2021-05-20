@@ -8,21 +8,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 public class Main {
     public static void main(String[] args) throws IOException {
         String directoryToSearch = "";
         String searchFile = "test.txt";
+        String path = "/Users/raydavis/Desktop/developmentJAVA/Modul2/freedom.txt";
         long minSize = 11;
         long maxSize = 99;
         String regEx = "t.*";
+        String searchString = "World";
         String keyLine = "Our World is so big!";
-        System.out.println(findFile(directoryToSearch, searchFile, minSize, maxSize, regEx, keyLine));
-        System.out.println(searchFileByKeyWord("/Users/raydavis/Desktop/developmentJAVA/Modul2/freedom.txt","Our"));
-
+        System.out.println(findFile(directoryToSearch, searchFile, minSize, maxSize, regEx, searchString));
     }
-
-    public static List<Path> findFile(String directory, String name, long minSize, long maxSize, String regEx, String keyLine) throws IOException {
+    public static List<Path> findFile(String directory, String name, long minSize, long maxSize, String regEx, String searchString) throws IOException {
+        searchFileByKeyWord(searchString);
         try (Stream<Path> files = Files.walk(Paths.get(directory))) {
             return files
                     .filter(p -> p.getFileName().toString().equals(name) || p.toFile().getName().matches(regEx))
@@ -38,11 +37,8 @@ public class Main {
                     .collect(Collectors.toList());
         }
     }
-
-    public static List<String> searchFileByKeyWord(String path, String match) {
-
+    public static void searchFileByKeyWord(String searchString) {
         List<String> linesToPresent = new ArrayList<>();
-
         File f = new File("/Users/raydavis/Desktop/developmentJAVA/Modul2/freedom.txt");
         FileReader fr;
         try {
@@ -51,17 +47,15 @@ public class Main {
             String line;
             do {
                 line = br.readLine();
-                Pattern p = Pattern.compile(match);
-                Matcher m = p.matcher("Our");
+                Pattern p = Pattern.compile("World");
+                Matcher m = p.matcher("World");
                 if (m.find())
                     linesToPresent.add(line);
             } while (line != null);
-
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return linesToPresent;
+        System.out.println(linesToPresent);
     }
 }
